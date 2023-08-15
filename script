@@ -1,0 +1,46 @@
+CREATE TABLE users (
+	id serial primary key,
+	name text NOT NULL,
+	email text unique NOT NULL,
+	phone varchar(10) NOT NULL,
+	cpf varchar(11) unique NOT NULL,
+	password text NOT NULL
+);
+
+CREATE TABLE sessions (
+	id serial primary key,
+	token uuid unique,
+	userid integer,
+	FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE adresses (
+	id serial primary key,
+	zipCode integer NOT NULL,
+	street text NOT NULL,
+	number integer NOT NULL,
+	complement integer null,
+	state text NOT NULL,
+	city text NOT NULL,
+	userid integer,
+	FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE categories (
+	id serial primary key,
+	category text NOT NULL
+);
+
+CREATE TABLE products (
+	id serial primary key,
+	name varchar(30) NOT NULL,
+	price integer NOT NULL,
+	description varchar(100) NOT NULL,
+	photo text NOT NULL,
+	status boolean NOT NULL,
+	categoryid integer,
+	FOREIGN KEY (categoryid) REFERENCES categories(id) ON DELETE CASCADE,
+	userid integer,
+	FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
+);
+
