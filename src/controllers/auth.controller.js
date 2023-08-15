@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { v4 as uuid} from "uuid";
+import fetch from 'node-fetch';
 import { checkPassword, createAddress, newSession, newUser, searchUser } from "../repositories/auth.repository.js";
 import { deleteUser } from "../repositories/auth.repository.js";
 
@@ -25,8 +26,8 @@ export async function signup(req,res) {
     }
 };
 
-async function checkAddress(cep, state, city) {
-    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+async function checkAddress(zipCode, state, city) {
+    const response = await fetch(`https://viacep.com.br/ws/${zipCode}/json/`);
     const data = await response.json();
 
     if (data.erro) {
@@ -40,15 +41,15 @@ async function checkAddress(cep, state, city) {
 };
 
 export async function registerAdress (req, res) {
-    const {email, cep, state, city} = req.body;
+    const {email, zipCode, street, number, complement, state, city} = req.body;
 
     try {
-        const address = await checkAddress(cep, state, city);
+        const address = await checkAddress(zipCode, state, city);
         if (!address) {
             return res.status(400).send("State or city don't match cep");
         }
 
-        await createAddress(email, cep, state, city, address);
+        await createAddress(email, zipCode, street, number, complement, state, city);
         return res.sendStatus(201);
         
     } catch (error) {

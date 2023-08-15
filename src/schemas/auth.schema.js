@@ -10,11 +10,13 @@ export const signupSchema = joi.object({
 });
 
 export const adressSchema = joi.object({
-    cep: joi.string().length(8).pattern(/^\d+$/).required(),
+    email: joi.string().email().required(),
+    zipCode: joi.string().length(8).pattern(/^\d+$/).required(),
+    street: joi.string().required(),
+    number: joi.string().required(),
     state: joi.string().length(2).pattern(/^[A-Za-z]{2}$/).required(),
-    city: joi.string().required(),
-    address: joi.string().required()
-})
+    city: joi.string().required()
+});
 
 export const signinSchema = joi.object({
     email: joi.string().email().required(),

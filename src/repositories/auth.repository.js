@@ -24,11 +24,11 @@ export async function checkPassword(email, password) {
     return false;
 };
 
-export async function createAddress(email, cep, state, city, address) {
+export async function createAddress(email, zipCode, street, number, complement, state, city) {
     const foundUser = await searchUser(email);
     await db.query(`
-        INSERT INTO addresses ("user_id", "cep", "state", "city", "address") VALUES ($1, $2, $3, $4, $5)`, 
-        [foundUser.id, cep, state, city, address]);
+        INSERT INTO adresses ("userid", "zipcode", "street", "number", "complement", "state", "city") VALUES ($1, $2, $3, $4, $5, $6, $7)`, 
+        [foundUser.id, zipCode, street, number, complement, state, city]);
 };
 
 export async function newSession(userId, token) {
@@ -38,6 +38,5 @@ export async function newSession(userId, token) {
 };
 
 export async function deleteUser(token) {
-    await db.query(`
-        DELETE FROM sessions WHERE token = $1`, [token]);
+    await db.query(`DELETE FROM sessions WHERE token = $1`, [token]);
 };
